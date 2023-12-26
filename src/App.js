@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import Todo from "./Todo.js";
+import TodoController from "./TodoController.js";
+import TotalTodos from "./TotalTodos.js";
+import { useTodos, useFilters } from "./store.js";
+import Filter from "./Filter.js";
 
-function App() {
+const App = () => {
+  const filter = useFilters((state) => state.filter);
+  const todos = useTodos((state) => {
+    switch (filter) {
+      case "completed":
+        return state.todos.filter((todo) => todo.completed);
+      case "uncompleted":
+        return state.todos.filter((todo) => !todo.completed);
+      default:
+        return state.todos;
+    }
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Filter />
+
+      <TodoController />
+
+      {todos.map((todo) => (
+        <Todo {...todo} key={todo.id} />
+      ))}
+
+      <TotalTodos />
     </div>
   );
-}
+};
 
 export default App;
