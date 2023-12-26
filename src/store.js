@@ -33,6 +33,7 @@ export const useTodos = create(
             ),
           }),
       }),
+      //persist doesn't work without this obj: (my case...)
       { name: "todoStore", version: 1 }
     )
   )
