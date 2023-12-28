@@ -3,6 +3,7 @@ import TodoController from "./TodoController.js";
 import TotalTodos from "./TotalTodos.js";
 import { useTodos, useFilters } from "./store.js";
 import Filter from "./Filter.js";
+import FetchTodos from "./FetchTodos.jsx";
 
 const App = () => {
   const filter = useFilters((state) => state.filter);
@@ -28,6 +29,7 @@ const App = () => {
       ))}
 
       <TotalTodos />
+      <FetchTodos />
     </div>
   );
 };

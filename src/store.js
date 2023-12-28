@@ -21,9 +21,10 @@ export const useTodos = create(
             };
             return { todos: [...state.todos, newTodo] };
           }),
-        removeTodo: (todoId) => set({
-          todos: get().todos.filter((todo) => todo.id !== todoId)
-        }),
+        removeTodo: (todoId) =>
+          set({
+            todos: get().todos.filter((todo) => todo.id !== todoId),
+          }),
         toggleTodo: (todoId) =>
           set({
             todos: get().todos.map((todo) =>
@@ -32,6 +33,24 @@ export const useTodos = create(
                 : todo
             ),
           }),
+        fetchTodos: async () => {
+          set({ loading: true });
+          try {
+            const res = await fetch(
+              "https://jsonplaceholder.typicode.com/todos?_limit=10"
+            );
+            if (!res.ok) throw new Error("Faild to fetch! Try again.");
+            const newTodos = await res.json();
+            set((state) => ({
+              todos: [...state.todos, ...newTodos],
+              error: null,
+            }));
+          } catch (error) {
+            set({ error: error.message });
+          } finally {
+            set({ loadin: false });
+          }
+        },
       }),
       { name: "todoStore", version: 1 }
     )
